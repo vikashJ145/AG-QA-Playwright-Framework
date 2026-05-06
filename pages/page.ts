@@ -1,14 +1,14 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 
 export class SignupPage {
 
   constructor(private page: Page) { }
 
-  async openSite() {
+  async openHomePage() {
     await this.page.goto('https://automationexercise.com');
   }
 
-  async closePopupIfPresent() {
+  async closePopupIfVisible() {
     const popupCloseBtn = this.page.locator('selector-for-close-button');
 
     if (await popupCloseBtn.isVisible({ timeout: 3000 })) {
@@ -16,130 +16,130 @@ export class SignupPage {
     }
   }
 
-  async clickOnSignup() {
+  async clickSignupLoginLink() {
     await this.page.click('a[href="/login"]');
   }
 
-  async signup(name: string, email: string) {
+  async enterSignupDetails(name: string, email: string) {
     await this.page.fill('input[data-qa="signup-name"]', name);
     await this.page.fill('input[data-qa="signup-email"]', email);
     await this.page.click('button[data-qa="signup-button"]');
   }
 
-  async enterPassword(password: string) {
+  async fillPassword(password: string) {
     await this.page.fill('#password', password);
   }
 
-  async enterFirstName(firstName: string) {
+  async fillFirstName(firstName: string) {
     await this.page.fill('#first_name', firstName);
   }
 
-  async enterLastName(lastName: string) {
+  async fillLastName(lastName: string) {
     await this.page.fill('#last_name', lastName);
   }
 
-  async enterAddress(address: string) {
+  async fillAddress(address: string) {
     await this.page.fill('#address1', address);
   }
 
-  async enterState(state: string) {
+  async fillState(state: string) {
     await this.page.fill('#state', state);
   }
 
-  async enterCity(city: string) {
+  async fillCity(city: string) {
     await this.page.fill('#city', city);
   }
 
-  async enterZipcode(zipcode: string) {
+  async fillZipcode(zipcode: string) {
     await this.page.fill('#zipcode', zipcode);
   }
 
-  async enterPhone(phone: string) {
+  async fillPhone(phone: string) {
     await this.page.fill('#mobile_number', phone);
   }
 
-  async clickCreateAccount() {
+  async clickCreateAccountButton() {
     await this.page.click('button[data-qa="create-account"]');
   }
 
-  async clickContinueBtn() {
+  async clickContinueButton() {
     await this.page.click('a[data-qa="continue-button"]');
   }
 
-  async clickDeleteAccount() {
+  async clickDeleteAccountButton() {
     await this.page.click('a[href="/delete_account"]');
   }
 
   // Login Methods
-  async enterLoginEmail(email: string) {
+  async fillLoginEmail(email: string) {
     await this.page.fill('input[data-qa="login-email"]', email);
   }
 
-  async enterLoginPassword(password: string) {
+  async fillLoginPassword(password: string) {
     await this.page.fill('input[data-qa="login-password"]', password);
   }
 
-  async clickLoginBtn() {
+  async clickLoginButton() {
     await this.page.click('button[data-qa="login-button"]');
   }
 
-  async clickLogout() {
+  async clickLogoutLink() {
     await this.page.locator('a[href="/logout"]').click();
   }
 
-  async clickContactUs() {
+  async clickContactUsLink() {
     await this.page.getByRole('link', { name: 'Contact us' }).click();
   }
 
-  async enterName(name: string) {
+  async fillContactName(name: string) {
     await this.page.fill('input[data-qa="name"]', name);
   }
 
-  async enterEmail(email: string) {
+  async fillContactEmail(email: string) {
     await this.page.fill('input[data-qa="email"]', email);
   }
 
-  async enterSubject(subject: string) {
+  async fillSubject(subject: string) {
     await this.page.fill('input[data-qa="subject"]', subject);
   }
 
-  async enterMessage(message: string) {
+  async fillMessage(message: string) {
     await this.page.fill('textarea[data-qa="message"]', message);
   }
 
-  async uploadFile(filePath: string) {
+  async uploadAttachment(filePath: string) {
     await this.page.setInputFiles('input[name="upload_file"]', filePath);
   }
 
-  async clickSubmit() {
+  async clickSubmitButton() {
     await this.page.locator('input[data-qa="submit-button"]').click();
   }
 
-  async clickHome() {
+  async clickHomeLink() {
     await this.page.getByRole('link', { name: 'Home' }).click();
   }
 
-  async clickTestCases() {
-    await this.page.locator("//a[text()=' Test Cases']").click();
+  async clickTestCasesLink() {
+    this.page.getByRole('link', { name: 'Test Cases' })
   }
 
-  async clickOnProducts() {
+  async clickProductsLink() {
     await this.page.getByRole('link', { name: 'Products' }).click();
   }
 
-  async searchProduct(productName: string) {
-    await this.page.locator("//input[@id='search_product']").fill(productName);
+  async enterProductInSearch(productName: string) {
+    await this.page.locator('#search_product').fill(productName);
   }
 
-  async clickOnSearch() {
-    await this.page.locator("//button[@id='submit_search']").click();
+  async clickSearchButton() {
+    await this.page.locator('#submit_search').click();
   }
 
-  async scrollToFooter() {
-    await this.page.locator('text=SUBSCRIPTION').scrollIntoViewIfNeeded();
+  async scrollToSubscriptionSection() {
+    await this.page.locator('#footer').scrollIntoViewIfNeeded();
   }
 
-  async enterSubscriptionEmail(email: string) {
+  async fillSubscriptionEmail(email: string) {
     await this.page.fill('//input[@id="susbscribe_email"]', email);
   }
 
@@ -151,42 +151,42 @@ export class SignupPage {
     await this.page.locator('#subscribe').click();
   }
 
-  async handleSubmitPopup() {
+  async handleAlertPopup() {
     this.page.once('dialog', async (dialog) => {
       console.log('Popup Message:', dialog.message());
-      await dialog.accept();   // Click OK button
+      await dialog.accept();
     });
   }
 
-  async verifySuccessMessage() {
-    await this.page.locator("(//div[text()='Success! Your details have been submitted successfully.'])[1]").isVisible();
+  async verifySubmissionSuccessMessage() {
+    await this.page.locator('.status.alert-success').isVisible();
   }
 
-  async clickCart() {
+  async clickCartLink() {
     await this.page.getByRole('link', { name: 'Cart' }).click();
   }
 
   async addFirstProductToCart() {
     const firstProduct = this.page.locator('.product-image-wrapper').first();
     await firstProduct.hover();
-    await this.page.locator('.product-overlay a:has-text("Add to cart")').first().click();
+    this.page.locator('.product-overlay a').filter({ hasText: 'Add to cart' }).first().click();
   }
 
-  async clickContinueShopping() {
+  async clickContinueShoppingButton() {
     await this.page.getByRole('button', { name: 'Continue Shopping' }).click();
   }
 
   async addSecondProductToCart() {
     const secondProduct = this.page.locator('.product-image-wrapper').nth(1);
     await secondProduct.hover();
-    await this.page.locator('.product-overlay a:has-text("Add to cart")').nth(1).click();
+    await this.page.locator('.product-overlay a').filter({ hasText: 'Add to cart' }).nth(1).click();
   }
 
-  async clickViewCart() {
+  async clickViewCartLink() {
     await this.page.getByRole('link', { name: 'View Cart' }).click();
   }
 
-  async clickFirstViewProduct() {
+  async clickFirstProductView() {
     await this.page.locator('a:has-text("View Product")').first().click();
   }
 
@@ -194,68 +194,108 @@ export class SignupPage {
     await this.page.fill('#quantity', quantity);
   }
 
-  async clickAddToCart() {
-    await this.page.locator('button:has-text("Add to cart")').click();
+  async clickAddToCartButton() {
+    await this.page.getByRole('button', { name: /add to cart/i }).click();
   }
 
-  async clickOnCrossButton() {
-    await this.page.locator("//a[@class='cart_quantity_delete']").click();
+  async removeProductFromCart() {
+    await this.page.locator('.cart_quantity_delete').click();
   }
 
-  async VerifyCartIsEmpty() {
-    await this.page.locator("//b[text()='Cart is empty!']").isVisible();
+  async verifyCartIsEmpty() {
+    await this.page.locator('#empty_cart').isVisible();
   }
 
-  async verifyCategory() {
-    await this.page.locator("//h2[text()='Category']").isVisible();
+  async verifyCategorySectionVisible() {
+    await this.page.locator('.left-sidebar').isVisible();
   }
 
-  async clickOnWomenCategory() {
+  async clickWomenCategory() {
     await this.page.locator("a[href='#Women']").click();
   }
 
-  async clickOnDress() {
+  async selectWomenDressCategory() {
     await this.page.locator("//a[@href='/category_products/1']").click();
   }
 
-  async clickOnMenCategory() {
+  async clickMenCategory() {
     await this.page.locator("a[href='#Men']").click();
   }
 
-  async clickOnJeans() {
+  async selectMenJeansCategory() {
     await this.page.locator("//a[@href='/category_products/6']").click();
   }
 
-  async clickOnPolo() {
+  async selectPoloBrand() {
     await this.page.locator("//a[@href='/brand_products/Polo']").click();
   }
 
-  async clickOnMadame() {
+  async selectMadameBrand() {
     await this.page.locator("//a[@href='/brand_products/Madame']").click();
   }
 
-  async clickOnViewProduct() {
+  async clickViewProduct() {
     await this.page.getByRole('link', { name: 'View Product' }).first().click();
   }
 
-  async fillName() {
+  async fillReviewName() {
     await this.page.getByPlaceholder('Your Name').fill('Anuj Gupta');
   }
 
-  async fillEmailAddress() {
+  async fillReviewEmail() {
     await this.page.locator('//input[@placeholder="Email Address"]').fill('anuj@test.com');
   }
 
-  async addYourReview() {
+  async fillReviewMessage() {
     await this.page.getByPlaceholder('Add Review Here!').fill('This product is very good and useful.');
   }
 
-  async clickOnSubmit() {
+  async clickSubmitReview() {
     await this.page.locator('#button-review').click();
   }
 
-  async clickOnScrollButton() {
+  async clickScrollUpButton() {
     await this.page.locator('#scrollUp').click();
+  }
+
+  async verifyAccountCreated() {
+    await expect(this.page.getByText('Account Created!')).toBeVisible();
+  }
+
+  async verifyDeleteAccountVisible() {
+    await expect(this.page.getByText('Delete Account')).toBeVisible();
+  }
+
+  async verifyAccountDeleted() {
+    await expect(this.page.getByText('Account Deleted!')).toBeVisible();
+  }
+
+  async verifyUserLoggedIn() {
+    await expect(this.page.getByText('Logged in as')).toBeVisible();
+  }
+
+  async verifySearchedProductsVisible() {
+    await expect(this.page.getByText('Searched Products')).toBeVisible();
+  }
+
+  async verifySubscriptionSuccess() {
+    await expect(this.page.getByText('successfully subscribed')).toBeVisible();
+  }
+
+  async verifyFirstProductInCart() {
+    await expect(this.page.locator('#product-1')).toBeVisible();
+  }
+
+  async verifyProductQuantity(expectedQty: string) {
+    await expect(this.page.locator('.cart_quantity button')).toHaveText(expectedQty);
+  }
+
+  async verifyReviewSubmitted() {
+    await expect(this.page.getByText('Thank you for your review')).toBeVisible();
+  }
+
+  async verifyFullFledgedTextVisible() {
+    await expect(this.page.getByText('Full-Fledged')).toBeVisible();
   }
 
 }
